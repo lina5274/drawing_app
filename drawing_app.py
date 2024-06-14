@@ -115,10 +115,7 @@ class DrawingApp:
         self.pen_color = pixel_color
         print(f"Выбранный цвет: {pixel_color}")
 
-def main():
+if __name__ == "__main__":
     root = tk.Tk()
     app = DrawingApp(root)
     root.mainloop()
-
-if __name__ == "__main__":
-    main()
