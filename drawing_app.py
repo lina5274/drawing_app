@@ -56,6 +56,8 @@ class DrawingApp:
      def choose_eraser_color(self):
         self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Используйте текущий цвет, если выбор не был сделан
         self.pen_color = self.eraser_color
+        self.update_color_display()
+
 
     def update_brush_size(self, size):
         self.brush_size = int(size)
@@ -84,6 +86,15 @@ class DrawingApp:
         filename = filedialog.asksaveasfilename(defaultextension=".png")
         if filename:
             self.image.save(filename)
+
+     def choose_color(self):
+        new_color = colorchooser.askcolor()[1]
+        if new_color:
+            self.pen_color = new_color
+            self.update_color_display()
+
+    def update_color_display(self):
+        self.color_display_label.configure(bg=self.pen_color)
 
     def pick_color(self, event):
         x, y = event.x, event.y
