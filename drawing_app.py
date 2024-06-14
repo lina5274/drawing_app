@@ -29,6 +29,9 @@ class DrawingApp:
         self.root.bind('<Control-s>', lambda event: self.save_image())
         self.root.bind('<Control-c>', lambda event: self.choose_color())
 
+        resize_button = tk.Button(self.root, text="Изменить размер холста", command=self.resize_canvas)
+        resize_button.pack(side=tk.BOTTOM)
+
 
     def setup_ui(self):
         control_frame = tk.Frame(self.root)
@@ -52,6 +55,16 @@ class DrawingApp:
         self.brush_size_menu = tk.OptionMenu(control_frame, self.brush_size_var, *sizes, command=self.update_brush_size)
         self.brush_size_menu.config(width=len(max(sizes, key=len)))
         self.brush_size_menu.pack(side=tk.LEFT)
+
+     def resize_canvas(self):
+        new_width = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую ширину:")
+        new_height = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую высоту:")
+
+        if new_width and new_height:
+            self.image = self.image.resize((new_width, new_height), Image.ANTIALIAS)
+            self.draw = ImageDraw.Draw(self.image)
+            self.canvas.config(width=new_width, height=new_height)
+            self.canvas.delete('all')
 
      def choose_eraser_color(self):
         self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Используйте текущий цвет, если выбор не был сделан
