@@ -18,6 +18,7 @@ class DrawingApp:
 
         self.last_x, self.last_y = None, None
         self.pen_color = 'black'
+        self.eraser_color = 'white' 
         self.brush_size = 1
 
         self.canvas.bind('<B1-Motion>', self.paint)
@@ -34,6 +35,9 @@ class DrawingApp:
         color_button = tk.Button(control_frame, text="Выбрать цвет", command=self.choose_color)
         color_button.pack(side=tk.LEFT)
 
+        eraser_button = tk.Button(control_frame, text="Ластик", command=self.choose_eraser_color)
+        eraser_button.pack(side=tk.LEFT)
+
         save_button = tk.Button(control_frame, text="Сохранить", command=self.save_image)
         save_button.pack(side=tk.LEFT)
 
@@ -43,6 +47,10 @@ class DrawingApp:
         self.brush_size_menu = tk.OptionMenu(control_frame, self.brush_size_var, *sizes, command=self.update_brush_size)
         self.brush_size_menu.config(width=len(max(sizes, key=len)))
         self.brush_size_menu.pack(side=tk.LEFT)
+
+     def choose_eraser_color(self):
+        self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Используйте текущий цвет, если выбор не был сделан
+        self.pen_color = self.eraser_color
 
     def update_brush_size(self, size):
         self.brush_size = int(size)
@@ -61,6 +69,16 @@ class DrawingApp:
 
     def reset(self, event):
         self.last_x, self.last_y = None, None
+
+    def clear_canvas(self):
+        self.image = Image.new("RGB", (600, 400), "white")
+        self.draw = ImageDraw.Draw(self.image)
+        self.canvas.delete('all')
+
+    def save_image(self):
+        filename = filedialog.asksaveasfilename(defaultextension=".png")
+        if filename:
+            self.image.save(filename)
 
 def main():
     root = tk.Tk()
