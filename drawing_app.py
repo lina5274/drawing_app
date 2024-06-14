@@ -56,6 +56,25 @@ class DrawingApp:
         self.brush_size_menu.config(width=len(max(sizes, key=len)))
         self.brush_size_menu.pack(side=tk.LEFT)
 
+        self.color_display_label = tk.Label(control_frame, bg=self.pen_color)
+        self.color_display_label.pack(side=tk.LEFT)
+
+        def add_text(self):
+        text = simpledialog.askstring(title="Добавление текста", prompt="Введите текст:")
+        if text:
+            x, y = map(int, simpledialog.askinteger(title="Позиция текста", prompt="Введите X и Y позицию:").split(','))
+            self.draw.text((x, y), text, fill=self.pen_color)
+            self.image.show()
+
+        def change_background(self):
+        new_color = colorchooser.askcolor()[1]
+        if new_color:
+            self.canvas.config(background=new_color)
+            self.image = Image.new("RGB", (600, 400), new_color)
+            self.draw = ImageDraw.Draw(self.image)
+            self.canvas.delete('all')
+
+
      def resize_canvas(self):
         new_width = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую ширину:")
         new_height = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую высоту:")
