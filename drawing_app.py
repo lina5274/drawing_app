@@ -21,6 +21,8 @@ class DrawingApp:
         self.eraser_color = 'white' 
         self.brush_size = 1
 
+        self.canvas.bind('<Button-3>', self.pick_color)
+
         self.canvas.bind('<B1-Motion>', self.paint)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
 
@@ -79,6 +81,12 @@ class DrawingApp:
         filename = filedialog.asksaveasfilename(defaultextension=".png")
         if filename:
             self.image.save(filename)
+
+    def pick_color(self, event):
+        x, y = event.x, event.y
+        pixel_color = self.image.getpixel((x, y))
+        self.pen_color = pixel_color
+        print(f"Выбранный цвет: {pixel_color}")
 
 def main():
     root = tk.Tk()
