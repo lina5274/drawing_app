@@ -21,10 +21,13 @@ class DrawingApp:
         self.eraser_color = 'white' 
         self.brush_size = 1
 
-        self.canvas.bind('<Button-3>', self.pick_color)
+        self.canvas.bind('<Button-3>', lambda event: self.pick_color(event))
 
         self.canvas.bind('<B1-Motion>', self.paint)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
+
+        self.root.bind('<Control-s>', lambda event: self.save_image())
+        self.root.bind('<Control-c>', lambda event: self.choose_color())
 
 
     def setup_ui(self):
