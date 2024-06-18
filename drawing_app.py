@@ -85,9 +85,11 @@ class DrawingApp:
             self.canvas.delete('all')
 
     def choose_eraser_color(self):
-        self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Use current color if no selection was made
+        s self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  
         self.pen_color = self.eraser_color
         self.update_color_display()
+        self.image = self.image.copy() 
+        self.draw = ImageDraw.Draw(self.image) 
 
     def update_brush_size(self, size):
         self.brush_size = int(size)
