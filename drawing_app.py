@@ -135,3 +135,8 @@ class DrawingApp:
         pixel_color = self.image.getpixel((x, y))
         self.pen_color = pixel_color
         print(f"Selected color: {pixel_color}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = DrawingApp(root)
+    root.mainloop()
