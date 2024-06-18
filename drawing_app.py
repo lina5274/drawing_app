@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import colorchooser, filedialog, messagebox
+from tkinter import colorchooser
+from tkinter.simpledialog import askstring, askinteger
+from tkinter.filedialog import asksaveasfilename
 from PIL import Image, ImageDraw
-
 
 class DrawingApp:
     def __init__(self, root):
@@ -14,12 +15,12 @@ class DrawingApp:
         self.canvas = tk.Canvas(root, width=600, height=400, bg='white')
         self.canvas.pack()
 
-        self.setup_ui()
-
         self.last_x, self.last_y = None, None
         self.pen_color = 'black'
-        self.eraser_color = 'white' 
+        self.eraser_color = 'white'
         self.brush_size = 1
+
+        self.setup_ui()
 
         self.canvas.bind('<Button-3>', lambda event: self.pick_color(event))
 
@@ -31,7 +32,6 @@ class DrawingApp:
 
         resize_button = tk.Button(self.root, text="Изменить размер холста", command=self.resize_canvas)
         resize_button.pack(side=tk.BOTTOM)
-
 
     def setup_ui(self):
         control_frame = tk.Frame(self.root)
@@ -59,14 +59,14 @@ class DrawingApp:
         self.color_display_label = tk.Label(control_frame, bg=self.pen_color)
         self.color_display_label.pack(side=tk.LEFT)
 
-        def add_text(self):
-        text = simpledialog.askstring(title="Добавление текста", prompt="Введите текст:")
+    def add_text(self):
+        text = askstring(title="Добавление текста", prompt="Введите текст:")
         if text:
-            x, y = map(int, simpledialog.askinteger(title="Позиция текста", prompt="Введите X и Y позицию:").split(','))
+            x, y = map(int, askinteger(title="Позиция текста", prompt="Введите X и Y позицию:").split(','))
             self.draw.text((x, y), text, fill=self.pen_color)
             self.image.show()
 
-        def change_background(self):
+    def change_background(self):
         new_color = colorchooser.askcolor()[1]
         if new_color:
             self.canvas.config(background=new_color)
@@ -74,10 +74,9 @@ class DrawingApp:
             self.draw = ImageDraw.Draw(self.image)
             self.canvas.delete('all')
 
-
-     def resize_canvas(self):
-        new_width = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую ширину:")
-        new_height = simpledialog.askinteger(title="Изменение размера холста", prompt="Введите новую высоту:")
+    def resize_canvas(self):
+        new_width = askinteger(title="Изменение размера холста", prompt="Введите новую ширину:")
+        new_height = askinteger(title="Изменение размера холста", prompt="Введите новую высоту:")
 
         if new_width and new_height:
             self.image = self.image.resize((new_width, new_height), Image.ANTIALIAS)
@@ -85,23 +84,22 @@ class DrawingApp:
             self.canvas.config(width=new_width, height=new_height)
             self.canvas.delete('all')
 
-     def choose_eraser_color(self):
-        self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Используйте текущий цвет, если выбор не был сделан
+    def choose_eraser_color(self):
+        self.eraser_color = colorchooser.askcolor()[1] or self.eraser_color  # Use current color if no selection was made
         self.pen_color = self.eraser_color
         self.update_color_display()
 
-
     def update_brush_size(self, size):
         self.brush_size = int(size)
-        print(f"Новый размер кисти: {self.brush_size}")
+        print(f"New brush size: {self.brush_size}")
 
     def paint(self, event):
         if self.last_x and self.last_y:
             self.canvas.create_line(self.last_x, self.last_y, event.x, event.y,
-                                    width=self.brush_size_scale.get(), fill=self.pen_color,
+                                    width=self.brush_size, fill=self.pen_color,
                                     capstyle=tk.ROUND, smooth=tk.TRUE)
             self.draw.line([self.last_x, self.last_y, event.x, event.y], fill=self.pen_color,
-                           width=self.brush_size_scale.get())
+                           width=self.brush_size)
 
         self.last_x = event.x
         self.last_y = event.y
@@ -115,11 +113,11 @@ class DrawingApp:
         self.canvas.delete('all')
 
     def save_image(self):
-        filename = filedialog.asksaveasfilename(defaultextension=".png")
+        filename = asksaveasfilename(defaultextension=".png")
         if filename:
             self.image.save(filename)
 
-     def choose_color(self):
+    def choose_color(self):
         new_color = colorchooser.askcolor()[1]
         if new_color:
             self.pen_color = new_color
@@ -132,7 +130,7 @@ class DrawingApp:
         x, y = event.x, event.y
         pixel_color = self.image.getpixel((x, y))
         self.pen_color = pixel_color
-        print(f"Выбранный цвет: {pixel_color}")
+        print(f"Selected color: {pixel_color}")
 
 if __name__ == "__main__":
     root = tk.Tk()
