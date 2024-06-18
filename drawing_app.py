@@ -100,6 +100,8 @@ class DrawingApp:
                                     capstyle=tk.ROUND, smooth=tk.TRUE)
             self.draw.line([self.last_x, self.last_y, event.x, event.y], fill=self.pen_color,
                            width=self.brush_size)
+            self.image = self.image.copy()  # Обновляем изображение после рисования
+            self.draw = ImageDraw.Draw(self.image)  # Создаем новый объект Draw для текущего состояния изображения
 
         self.last_x = event.x
         self.last_y = event.y
@@ -122,6 +124,8 @@ class DrawingApp:
         if new_color:
             self.pen_color = new_color
             self.update_color_display()
+            self.image = self.image.copy()  # Обновляем изображение после изменения цвета
+            self.draw = ImageDraw.Draw(self.image)  # Создаем новый объект Draw для текущего состояния изображения
 
     def update_color_display(self):
         self.color_display_label.configure(bg=self.pen_color)
@@ -131,8 +135,3 @@ class DrawingApp:
         pixel_color = self.image.getpixel((x, y))
         self.pen_color = pixel_color
         print(f"Selected color: {pixel_color}")
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = DrawingApp(root)
-    root.mainloop()
